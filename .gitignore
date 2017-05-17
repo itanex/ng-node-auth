@@ -1,0 +1,7 @@
+# Third Party Libraries
+node_modules
+public/lib
+
+# Typescript Artifacts
+*.js
+*.js.map
