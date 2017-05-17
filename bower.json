@@ -1,0 +1,22 @@
+{
+  "name": "ng-node-auth",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Bryan Wood <whenidev@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/itanex/ng-quick-lesson",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "angular": "^1.6.4",
+    "angular-ui-router": "^1.0.3"
+  }
+}
