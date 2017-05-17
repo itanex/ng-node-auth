@@ -5,7 +5,7 @@ import { User, IUser } from '../models/user';
 
 let router = express.Router();
 
-router.post('/register', (req, res, next) => {
+router.post('/register', validateRegister, (req, res, next) => {
   let user = new User();
 
   user.username = req.body.username;
@@ -21,7 +21,7 @@ router.post('/register', (req, res, next) => {
   });
 });
 
-router.post('/login', (req, res, next) => {
+router.post('/login', validateLogin, (req, res, next) => {
   passport.authenticate('local', (err, user: IUser, info) => {
     console.log('User is authenticated', user);
 
@@ -42,5 +42,37 @@ router.post('/logout', (req, res, next) => {
   
   res.status(204).end();
 });
+
+
+function validateRegister (req, res, next) {
+    req.checkBody('username', 'Username is required').notEmpty();
+    req.checkBody('username', 'Username must be alphanumeric').isAlphanumeric();
+    req.checkBody('email', 'Email is required').notEmpty();
+    req.checkBody('email', 'Email is not a valid email').isEmail();
+    req.checkBody('password', 'Password is required').notEmpty();
+
+    var errors = req.validationErrors();
+
+    if (errors) {
+        res.status(400).send(errors);
+        return;
+    }
+
+    return next();
+}
+
+function validateLogin(req: express.Request, res: express.Response, next: express.NextFunction) {
+    req.checkBody('username', 'Username is required').notEmpty();
+    req.checkBody('password', 'Password is required').notEmpty();
+
+    var errors = req.validationErrors();
+
+    if (errors) {
+        res.status(400).send(errors);
+        return;
+    }
+
+    return next();
+}
 
 export default router;

@@ -5,7 +5,10 @@ import * as mongoose from 'mongoose';
 import * as passport from 'passport';
 import * as expressJWT from 'express-jwt';
 
-//  Import API/Routes
+// Establish the express validation 
+let expressValidator = require('express-validator');
+
+// Import API/Routes
 import Users from './routes/users';
 
 // Integrate Passport Configuration
@@ -20,6 +23,7 @@ mongoose.connect('mongodb://admin:admin@ds064299.mlab.com:64299/ng-node-auth');
 // Configuring the application
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(expressValidator());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Configure Application with Passport
