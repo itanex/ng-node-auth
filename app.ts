@@ -20,6 +20,10 @@ const authenticate = expressJWT({secret: 'SecretKey'});
 // Establish Database Connection
 mongoose.connect('mongodb://admin:admin@ds064299.mlab.com:64299/ng-node-auth');
 
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
 // Configuring the application
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -40,7 +44,7 @@ app.get('/api/profile', authenticate, (req, res, next) => {
 
 // Catchall/Application endpoint
 app.get('/*', (req, res, next) => {
-    res.sendFile('./public/index.html');
+    res.render('index');
 });
 
 export = app;
