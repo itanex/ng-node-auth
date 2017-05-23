@@ -30,7 +30,11 @@ router.post('/login', validateLogin, (req, res, next) => {
     }
 
     if(user) {
-      return res.status(200).json(user.generateJWT());
+      return res.status(200).json({
+        token: user.generateJWT(),
+        username: user.username,
+        email: user.email
+      });
     }
 
     return res.status(400).send(info);

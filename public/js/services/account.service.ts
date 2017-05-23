@@ -38,9 +38,9 @@ namespace NodeAuth.Services {
                 .then((result) => {
                     if (result.status === 200) {
 
-                        this._user.username = 'Benny'//result.data.username;
-                        this._user.email = 'Jones'//result.data.email;
-                        this._token = result.data;
+                        this._user.username = result.data.username;
+                        this._user.email = result.data.email;
+                        this._token = result.data.token;
                         this._isAuthenticated = true;
 
                         return true;
