@@ -31,11 +31,11 @@ let UserSchema = new mongoose.Schema({
 
 UserSchema.method('setPassword', function (password: string): void {
     this.salt = crypto.randomBytes(16).toString('hex');
-    this.passwordHash = crypto.pbkdf2Sync(password, this.salt, 1000, 64, 'sha1').toString('hex');
+    this.passwordHash = crypto.pbkdf2Sync(password, this.salt, 1000, 64, 'sha256').toString('hex');
 });
 
 UserSchema.method('validatePassword', function (password: string): boolean {
-    let hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64, 'sha1').toString('hex');
+    let hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64, 'sha256').toString('hex');
     return (hash === this.passwordHash);
 });
 
