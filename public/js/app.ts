@@ -12,5 +12,6 @@ namespace NodeAuth {
     module.controller('ApplicationController', NodeAuth.ApplicationController);
 
     module.service('AccountService', Services.AccountService);
+    // module.service('SessionService', Services.SessionService);
     module.service('TestService', Services.TestService);
 }
