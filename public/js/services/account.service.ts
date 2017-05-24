@@ -1,35 +1,45 @@
 namespace NodeAuth.Services {
     export class AccountService {
-        private _isAuthenticated: boolean = false;
         public get isAuthenticated(): boolean {
-            return this._isAuthenticated;
+            return this.getItem<boolean>('authenticated') || false;
         }
 
-        private _user: Models.User = new Models.User();
         public get user(): Models.User {
-            return this._user;
+            return this.getItem<Models.User>('user') || null;
         }
 
-        private _token: string = '';
         public get AuthenticationToken(): string {
-            return this._token;
+            return this.getItem<string>('authtoken') || '';
+        }
+
+        private getItem<T>(key: string): T {
+            return JSON.parse(this.$window.sessionStorage.getItem(key));
+        }
+
+        private setItem(key: string, data: any): void {
+            this.$window.sessionStorage.setItem(key, JSON.stringify(data));
+        }
+
+        private initializeSession() {
+            this.setItem('user', new Models.User());
+            this.setItem('authtoken', null);
+            this.setItem('authenticated', false);
         }
 
         static $inject = [
-            '$http'
+            '$http',
+            '$window'
         ];
 
         constructor(
-            private $http: ng.IHttpService
+            private $http: ng.IHttpService,
+            private $window: ng.IWindowService
         ) {
-
+            this.setItem('authenticated', false);
         }
 
         public logout(): void {
-            this._isAuthenticated = false;
-            this._token = '';
-            this._user = new Models.User();
-
+            this.initializeSession();
             this.$http.post('/api/users/logout', null);
         }
 
@@ -37,11 +47,13 @@ namespace NodeAuth.Services {
             return this.$http.post<any>('/api/users/login', user)
                 .then((result) => {
                     if (result.status === 200) {
+                        let user = new Models.User();
+                        user.username = result.data.username;
+                        user.email = result.data.email;
 
-                        this._user.username = result.data.username;
-                        this._user.email = result.data.email;
-                        this._token = result.data.token;
-                        this._isAuthenticated = true;
+                        this.setItem('user', user);
+                        this.setItem('authtoken', result.data.token);
+                        this.setItem('authenticated', true);
 
                         return true;
 
